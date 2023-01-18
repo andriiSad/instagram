@@ -20,7 +20,7 @@ imageToUint8list(String key) async {
 showSnackBar(String content, BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(content),
-    duration: Duration(
+    duration: const Duration(
       milliseconds: 800,
     ),
   ));
