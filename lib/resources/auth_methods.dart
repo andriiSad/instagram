@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:instagram/resources/storage_methods.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -26,6 +27,9 @@ class AuthMethods {
 
         print(cred.user!.uid);
 
+        String photoUrl = await StorageMethods()
+            .uploadImageToStorage('profilePictures', file, false);
+
         await _firestore.collection('users').doc(cred.user!.uid).set({
           'username': username,
           'uid': cred.user!.uid,
@@ -33,8 +37,49 @@ class AuthMethods {
           'bio': bio,
           'followers': [],
           'following': [],
+          'photoUrl': photoUrl,
         });
         res = 'success';
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-email') {
+        res = 'The email address is badly formatted.';
+      } else if (e.code == 'weak-password') {
+        res = 'Password should be at least 6 characters';
+      } else if (e.code == 'email-already-in-use') {
+        res = 'The email address is already in use by another account.';
+      } else {
+        res = e.toString();
+      }
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
+  Future<String> loginUser({
+    required String email,
+    required String password,
+  }) async {
+    String res = "Some error occured";
+
+    try {
+      if (email.isEmpty || password.isEmpty) {
+        res = 'Please enter all the fields';
+      } else {
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+        res = 'success';
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        res = 'Wrong password, try again.';
+      } else if (e.code == 'user-not-found') {
+        res = "Can't find a user with such credentials.";
+      } else if (e.code == 'invalid-email') {
+        res = 'The email address is badly formatted.';
+      } else {
+        res = e.toString();
       }
     } catch (err) {
       res = err.toString();

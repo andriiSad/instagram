@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.18.5 <3.0.0'
+  sdk: '>=2.18.5'
 
 dependencies:
   cloud_firestore: ^4.3.1
@@ -36,7 +36,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/ic_instagram.svg
-  #   - images/a_dot_ham.jpeg
+    - assets/default_avatar.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

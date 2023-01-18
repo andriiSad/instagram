@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 pickImage(ImageSource source) async {
-  final ImagePicker _imagePicker = ImagePicker();
+  final ImagePicker imagePicker = ImagePicker();
 
-  XFile? _file = await _imagePicker.pickImage(source: source);
-  if (_file != null) {
-    return await _file.readAsBytes();
+  XFile? file = await imagePicker.pickImage(source: source);
+  if (file != null) {
+    return await file.readAsBytes();
   } else {
     print('No image selected');
   }
+}
+
+imageToUint8list(String key) async {
+  return (await rootBundle.load(key)).buffer.asUint8List();
+}
+
+showSnackBar(String content, BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(content),
+    duration: Duration(
+      milliseconds: 800,
+    ),
+  ));
 }

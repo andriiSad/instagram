@@ -6,6 +6,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/widgets/text_field_input.dart';
 
+import '../resources/auth_methods.dart';
+import '../utils/utils.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -16,12 +19,30 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
 
     super.dispose();
+  }
+
+  void _loginUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthMethods().loginUser(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+    setState(() {
+      _isLoading = false;
+    });
+    if (res != 'success') {
+      showSnackBar(res, context);
+    }
   }
 
   @override
@@ -64,6 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 24,
               ),
               InkWell(
+                onTap: _loginUser,
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
@@ -76,7 +98,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     color: blueColor,
                   ),
-                  child: const Text('Log in'),
+                  child: SizedBox(
+                    height: 32,
+                    child: Center(
+                      child: _isLoading
+                          ? const CircularProgressIndicator(
+                              color: primaryColor,
+                            )
+                          : const Text('Log in'),
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(
