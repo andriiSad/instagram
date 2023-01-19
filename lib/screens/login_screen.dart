@@ -142,6 +142,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: const Text("Don't have an account?"),
                   ),
+                  SizedBox(
+                    width: 2,
+                  ),
                   GestureDetector(
                     onTap: navigateToSignUp,
                     child: Container(

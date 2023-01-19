@@ -69,9 +69,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() {
       _isLoading = false;
     });
-    if (res != 'success') {
+    if (res != 'success' && mounted) {
       showSnackBar(res, context);
     } else {
+      if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const ResponsiveLayout(
@@ -202,6 +203,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: const Text("Already have an account?"),
+                  ),
+                  const SizedBox(
+                    width: 2,
                   ),
                   GestureDetector(
                     onTap: navigateToLogin,
