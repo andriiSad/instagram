@@ -34,8 +34,6 @@ class AuthMethods {
           password: password,
         );
 
-        print(cred.user!.uid);
-
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('profilePictures', file, false);
 

@@ -5,7 +5,6 @@ import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/responsive/mobile_screen_layout.dart';
 import 'package:instagram/responsive/web_screen_layout.dart';
 import 'package:instagram/screens/login_screen.dart';
-import 'package:instagram/screens/sign_up_screen.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:provider/provider.dart';
 

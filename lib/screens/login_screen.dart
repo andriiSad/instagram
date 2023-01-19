@@ -1,7 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:flutter_svg/svg.dart';
 import 'package:instagram/screens/sign_up_screen.dart';
 import 'package:instagram/utils/colors.dart';
@@ -44,17 +42,19 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = false;
     });
-    if (res != 'success') {
+    if (res != 'success' && mounted) {
       showSnackBar(res, context);
     } else {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const ResponsiveLayout(
-            webScreenLayout: WebScreenLayout(),
-            mobileScreenLayout: MobileScreenLayout(),
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const ResponsiveLayout(
+              webScreenLayout: WebScreenLayout(),
+              mobileScreenLayout: MobileScreenLayout(),
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -142,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: const Text("Don't have an account?"),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 2,
                   ),
                   GestureDetector(

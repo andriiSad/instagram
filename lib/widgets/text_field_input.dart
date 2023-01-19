@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class TextFieldInput extends StatelessWidget {
   const TextFieldInput({
@@ -17,16 +15,16 @@ class TextFieldInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final InputBorder = OutlineInputBorder(
+    final inputBorder = OutlineInputBorder(
       borderSide: Divider.createBorderSide(context),
     );
     return TextField(
       controller: textEditingController,
       decoration: InputDecoration(
         hintText: hintText,
-        border: InputBorder,
-        focusedBorder: InputBorder,
-        enabledBorder: InputBorder,
+        border: inputBorder,
+        focusedBorder: inputBorder,
+        enabledBorder: inputBorder,
         filled: true,
         contentPadding: const EdgeInsets.all(8),
       ),
