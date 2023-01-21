@@ -27,7 +27,7 @@ class FeedScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: defaultTargetPlatform != TargetPlatform.android
+            icon: defaultTargetPlatform == TargetPlatform.android
                 ? const FaIcon(FontAwesomeIcons.android)
                 : const FaIcon(FontAwesomeIcons.apple),
           )
