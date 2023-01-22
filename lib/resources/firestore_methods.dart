@@ -78,7 +78,6 @@ class FirestoreMethods {
 
         Comment comment = Comment(
           username: username,
-          postId: postId,
           uid: uid,
           profImage: profImage,
           commentId: commentId,

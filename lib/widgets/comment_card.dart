@@ -103,7 +103,7 @@ class _CommentCardState extends State<CommentCard> {
                   },
                 ),
                 if (widget.snap['likes'].length != 0)
-                  Text('${widget.snap['likes'].length.toString()}'),
+                  Text(widget.snap['likes'].length.toString()),
               ],
             ),
           ),
