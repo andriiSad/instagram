@@ -15,16 +15,22 @@ import '../widgets/comment_card.dart';
 class CommentsScreen extends StatefulWidget {
   const CommentsScreen({
     super.key,
-    required this.postId,
+    required this.snap,
   });
-  final String postId;
+  final snap;
 
   @override
   State<CommentsScreen> createState() => _CommentsScreenState();
 }
 
 class _CommentsScreenState extends State<CommentsScreen> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _commentController = TextEditingController();
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
+  }
 
   bool _isLoading = false;
 
@@ -78,7 +84,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('posts')
-            .doc(widget.postId)
+            .doc(widget.snap['postId'])
             .collection('comments')
             .orderBy("datePublished", descending: true)
             .snapshots(),
@@ -120,7 +126,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     right: 8,
                   ),
                   child: TextField(
-                    controller: _controller,
+                    controller: _commentController,
                     decoration: InputDecoration(
                       hintText: 'Comment as ${user.username}',
                       border: InputBorder.none,
@@ -133,11 +139,11 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   _uploadComment(
                     username: user.username,
                     uid: user.uid,
-                    postId: widget.postId,
-                    commentText: _controller.text,
+                    postId: widget.snap['postId'],
+                    commentText: _commentController.text,
                     profImage: user.photoUrl,
                   );
-                  _controller.clear();
+                  _commentController.clear();
                 },
                 child: Container(
                   padding: const EdgeInsets.all(8),

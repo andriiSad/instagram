@@ -73,25 +73,29 @@ class FirestoreMethods {
   }) async {
     String res = "Some error occured";
     try {
-      String commentId = const Uuid().v1();
+      if (commentText.trim().isNotEmpty) {
+        String commentId = const Uuid().v1();
 
-      Comment comment = Comment(
-        username: username,
-        postId: postId,
-        uid: uid,
-        profImage: profImage,
-        commentId: commentId,
-        commentText: commentText,
-        datePublished: DateTime.now(),
-        likes: [],
-      );
-      _firestore
-          .collection('posts')
-          .doc(postId)
-          .collection('comments')
-          .doc(commentId)
-          .set(comment.toJson());
-      res = 'success';
+        Comment comment = Comment(
+          username: username,
+          postId: postId,
+          uid: uid,
+          profImage: profImage,
+          commentId: commentId,
+          commentText: commentText,
+          datePublished: DateTime.now(),
+          likes: [],
+        );
+        _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .set(comment.toJson());
+        res = 'success';
+      } else {
+        res = 'Cant upload empty comment';
+      }
     } catch (e) {
       res = e.toString();
     }
