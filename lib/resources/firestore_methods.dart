@@ -60,6 +60,7 @@ class FirestoreMethods {
         });
       }
     } catch (e) {
+      //TODO change to res approach
       print(e.toString());
     }
   }
@@ -129,6 +130,7 @@ class FirestoreMethods {
         });
       }
     } catch (e) {
+      //TODO change to res approach
       print(e.toString());
     }
   }
@@ -137,6 +139,7 @@ class FirestoreMethods {
     try {
       await _firestore.collection('posts').doc(postId).delete();
     } catch (e) {
+      //TODO change to res approach
       print(e.toString());
     }
   }

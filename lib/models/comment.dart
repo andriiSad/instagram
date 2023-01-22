@@ -18,8 +18,8 @@ class Comment {
   final String profImage;
   final String commentId;
   final String commentText;
-  final datePublished;
-  final likes;
+  final DateTime datePublished;
+  final List<String> likes;
 
   Map<String, dynamic> toJson() => {
         'username': username,

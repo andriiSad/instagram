@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:instagram/utils/colors.dart';
-import 'package:instagram/widgets/text_field_input.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user.dart';
@@ -17,7 +14,7 @@ class CommentsScreen extends StatefulWidget {
     super.key,
     required this.snap,
   });
-  final snap;
+  final QueryDocumentSnapshot<Map<String, dynamic>> snap;
 
   @override
   State<CommentsScreen> createState() => _CommentsScreenState();
