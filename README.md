@@ -17,6 +17,6 @@ samples, guidance on mobile development, and a full API reference.
 
 ## IDEAS
 
-- take care of snackbars
-- add reels functionality with some API(maybe redditAPI)
 - overlays on Signup Screen
+- check TODOs
+- add reels functionality with some API(maybe redditAPI)
