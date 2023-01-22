@@ -32,8 +32,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
     super.dispose();
   }
 
-  bool _isLoading = false;
-
   void _uploadComment({
     required String username,
     required String uid,
@@ -41,9 +39,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
     required String commentText,
     required String postId,
   }) async {
-    setState(() {
-      _isLoading = true;
-    });
     try {
       String res = await FirestoreMethods().uploadComment(
         username: username,
@@ -53,15 +48,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
         uid: uid,
       );
       if (res == "success" && mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-
         showSnackBar('Commented!', context);
       } else {
-        setState(() {
-          _isLoading = false;
-        });
         showSnackBar(res, context);
       }
     } catch (e) {
