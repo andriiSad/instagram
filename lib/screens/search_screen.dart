@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:instagram/utils/colors.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -35,7 +33,6 @@ class _SearchScreenState extends State<SearchScreen> {
               setState(() {
                 isShowUsers = true;
               });
-              print(_);
             }),
           ),
         ),
@@ -73,6 +70,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   );
                 },
               )
-            : Text('POSTS'));
+            : const Text('POSTS'));
   }
 }

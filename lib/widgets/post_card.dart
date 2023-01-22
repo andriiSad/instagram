@@ -63,7 +63,6 @@ class _PostCardState extends State<PostCard> {
   }
 
   showComplainDialog(BuildContext context) {
-    // set up the buttons
     Widget cancelButton = TextButton(
       child: const Text("Cancel"),
       onPressed: () {
@@ -78,11 +77,11 @@ class _PostCardState extends State<PostCard> {
         style: TextStyle(color: Colors.red),
       ),
       onPressed: () {
+        //TODO  add complanation logic
         print("Compained ${widget.snap['postId']}");
         Navigator.of(context).pop();
       },
     );
-    // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       content: const Text("Do you want to complain about this post?"),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -91,7 +90,6 @@ class _PostCardState extends State<PostCard> {
         deleteButton,
       ],
     );
-    // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
