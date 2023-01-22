@@ -79,6 +79,7 @@ class FirestoreMethods {
         Comment comment = Comment(
           username: username,
           uid: uid,
+          postId: postId,
           profImage: profImage,
           commentId: commentId,
           commentText: commentText,
@@ -127,6 +128,14 @@ class FirestoreMethods {
           'likes': FieldValue.arrayUnion([uid]),
         });
       }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> deletePost(String postId) async {
+    try {
+      await _firestore.collection('posts').doc(postId).delete();
     } catch (e) {
       print(e.toString());
     }

@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -51,12 +49,14 @@ class _CommentCardState extends State<CommentCard> {
                           text: widget.snap['username'],
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
+                            color: primaryColor,
                           ),
                         ),
                         TextSpan(
                           text: " ${widget.snap['commentText']}",
                           style: const TextStyle(
                             fontWeight: FontWeight.w400,
+                            color: primaryColor,
                           ),
                         ),
                       ],
@@ -96,7 +96,7 @@ class _CommentCardState extends State<CommentCard> {
                   onPressed: () async {
                     await FirestoreMethods().likeComment(
                       postId: widget.snap['postId'],
-                      uid: widget.snap['uid'],
+                      uid: user.uid,
                       likes: widget.snap['likes'],
                       commentId: widget.snap['commentId'],
                     );

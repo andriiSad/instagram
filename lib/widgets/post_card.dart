@@ -14,10 +14,8 @@ class PostCard extends StatefulWidget {
   const PostCard({
     super.key,
     required this.snap,
-    required this.commentsQuantity,
   });
   final QueryDocumentSnapshot<Map<String, dynamic>> snap;
-  final int commentsQuantity;
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -25,6 +23,82 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
+
+  showDeleteDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: const Text("Cancel"),
+      onPressed: () {
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      },
+    );
+    Widget deleteButton = TextButton(
+      child: const Text(
+        "Delete",
+        style: TextStyle(color: Colors.red),
+      ),
+      onPressed: () {
+        FirestoreMethods().deletePost(widget.snap['postId']);
+        Navigator.of(context).pop();
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: const Text("Would you like to delete this post?"),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      actions: [
+        cancelButton,
+        deleteButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showComplainDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: const Text("Cancel"),
+      onPressed: () {
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      },
+    );
+    Widget deleteButton = TextButton(
+      child: const Text(
+        "Complain",
+        style: TextStyle(color: Colors.red),
+      ),
+      onPressed: () {
+        print("Compained ${widget.snap['postId']}");
+        Navigator.of(context).pop();
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: const Text("Do you want to complain about this post?"),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      actions: [
+        cancelButton,
+        deleteButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,37 +132,23 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => Dialog(
-                        child: ListView(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 16,
-                            ),
-                            shrinkWrap: true,
-                            children: [
-                              'Delete',
-                            ]
-                                .map((e) => InkWell(
-                                      onTap: () {},
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 20,
-                                          horizontal: 16,
-                                        ),
-                                        child: Text(e),
-                                      ),
-                                    ))
-                                .toList()),
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.more_vert,
-                  ),
-                ),
+                widget.snap['uid'] == user.uid
+                    ? IconButton(
+                        onPressed: () {
+                          showDeleteDialog(context);
+                        },
+                        icon: const Icon(
+                          Icons.delete,
+                        ),
+                      )
+                    : IconButton(
+                        onPressed: () {
+                          showComplainDialog(context);
+                        },
+                        icon: const Icon(
+                          Icons.assignment_late_outlined,
+                        ),
+                      )
               ],
             ),
           ),
@@ -235,13 +295,8 @@ class _PostCardState extends State<PostCard> {
                     padding: const EdgeInsets.symmetric(
                       vertical: 4,
                     ),
-                    child: Text(
-                      "View all ${widget.commentsQuantity} comments",
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: secondaryColor,
-                      ),
-                    ),
+                    //StreamBuilder to get comments quantity
+                    child: ViewAllCommentsWidget(widget: widget),
                   ),
                 ),
                 Container(
@@ -262,6 +317,66 @@ class _PostCardState extends State<PostCard> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class ViewAllCommentsWidget extends StatelessWidget {
+  const ViewAllCommentsWidget({
+    Key? key,
+    required this.widget,
+  }) : super(key: key);
+
+  final PostCard widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection('posts')
+          .doc(widget.snap['postId'])
+          .collection('comments')
+          .snapshots(),
+      builder: (context,
+          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          //TODO text is blinking when something in stream changes
+          return const Text(
+            "View all    comments",
+            style: TextStyle(
+              fontSize: 16,
+              color: secondaryColor,
+            ),
+          );
+        }
+        int commentLength = snapshot.data!.docs.length;
+        switch (commentLength) {
+          case 0:
+            return const Text(
+              "No comments yet",
+              style: TextStyle(
+                fontSize: 16,
+                color: secondaryColor,
+              ),
+            );
+          case 1:
+            return const Text(
+              "View 1 comment",
+              style: TextStyle(
+                fontSize: 16,
+                color: secondaryColor,
+              ),
+            );
+          default:
+            return Text(
+              "View all $commentLength comments",
+              style: const TextStyle(
+                fontSize: 16,
+                color: secondaryColor,
+              ),
+            );
+        }
+      },
     );
   }
 }

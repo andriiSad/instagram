@@ -27,9 +27,7 @@ class FeedScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: defaultTargetPlatform == TargetPlatform.android
-                ? const FaIcon(FontAwesomeIcons.android)
-                : const FaIcon(FontAwesomeIcons.apple),
+            icon: Icon(Icons.messenger_sharp),
           )
         ],
       ),
@@ -49,8 +47,6 @@ class FeedScreen extends StatelessWidget {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) => PostCard(
               snap: snapshot.data!.docs[index],
-              //TODO display correct comments quantity
-              commentsQuantity: 190,
             ),
           );
         },

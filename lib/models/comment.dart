@@ -5,6 +5,7 @@ class Comment {
     required this.username,
     required this.uid,
     required this.profImage,
+    required this.postId,
     required this.commentId,
     required this.commentText,
     required this.datePublished,
@@ -13,6 +14,7 @@ class Comment {
 
   final String username;
   final String uid;
+  final String postId;
   final String profImage;
   final String commentId;
   final String commentText;
@@ -22,6 +24,7 @@ class Comment {
   Map<String, dynamic> toJson() => {
         'username': username,
         'uid': uid,
+        'postId': postId,
         'profImage': profImage,
         'commentId': commentId,
         'commentText': commentText,
@@ -35,6 +38,7 @@ class Comment {
     return Comment(
       username: snapshot['username'],
       uid: snapshot['uid'],
+      postId: snapshot['postId'],
       profImage: snapshot['profImage'],
       commentId: snapshot['commentId'],
       commentText: snapshot['commentText'],
