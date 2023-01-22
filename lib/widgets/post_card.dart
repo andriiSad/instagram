@@ -11,8 +11,13 @@ import 'package:provider/provider.dart';
 import '../utils/colors.dart';
 
 class PostCard extends StatefulWidget {
-  const PostCard({super.key, required this.snap});
+  const PostCard({
+    super.key,
+    required this.snap,
+    required this.commentsQuantity,
+  });
   final QueryDocumentSnapshot<Map<String, dynamic>> snap;
+  final int commentsQuantity;
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -155,7 +160,9 @@ class _PostCardState extends State<PostCard> {
               IconButton(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => CommentsScreen(),
+                    builder: (_) => CommentsScreen(
+                      postId: widget.snap['postId'],
+                    ),
                   ),
                 ),
                 icon: const Icon(
@@ -217,14 +224,20 @@ class _PostCardState extends State<PostCard> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => CommentsScreen(
+                        postId: widget.snap['postId'],
+                      ),
+                    ),
+                  ),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                       vertical: 4,
                     ),
-                    child: const Text(
-                      'View all 200 comments',
-                      style: TextStyle(
+                    child: Text(
+                      "View all ${widget.commentsQuantity} comments",
+                      style: const TextStyle(
                         fontSize: 16,
                         color: secondaryColor,
                       ),

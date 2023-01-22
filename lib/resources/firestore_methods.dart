@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instagram/models/comment.dart';
 import 'package:instagram/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 
@@ -55,6 +56,71 @@ class FirestoreMethods {
         });
       } else {
         await _firestore.collection('posts').doc(postId).update({
+          'likes': FieldValue.arrayUnion([uid]),
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<String> uploadComment({
+    required String username,
+    required String uid,
+    required String profImage,
+    required String commentText,
+    required String postId,
+  }) async {
+    String res = "Some error occured";
+    try {
+      String commentId = const Uuid().v1();
+
+      Comment comment = Comment(
+        username: username,
+        postId: postId,
+        uid: uid,
+        profImage: profImage,
+        commentId: commentId,
+        commentText: commentText,
+        datePublished: DateTime.now(),
+        likes: [],
+      );
+      _firestore
+          .collection('posts')
+          .doc(postId)
+          .collection('comments')
+          .doc(commentId)
+          .set(comment.toJson());
+      res = 'success';
+    } catch (e) {
+      res = e.toString();
+    }
+    return res;
+  }
+
+  Future<void> likeComment({
+    required String postId,
+    required String commentId,
+    required String uid,
+    required List likes,
+  }) async {
+    try {
+      if (likes.contains(uid)) {
+        await _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .update({
+          'likes': FieldValue.arrayRemove([uid]),
+        });
+      } else {
+        await _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .update({
           'likes': FieldValue.arrayUnion([uid]),
         });
       }
