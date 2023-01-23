@@ -10,7 +10,7 @@ import 'package:instagram/utils/utils.dart';
 import '../widgets/follow_button.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({
+  const ProfileScreen({
     super.key,
     required this.uid,
   });
