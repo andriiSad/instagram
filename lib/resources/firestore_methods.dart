@@ -146,43 +146,45 @@ class FirestoreMethods {
   }
 
 //TODO change function parameters naming, fill notification with real data
-  Future<void> followUser(
-    String uid,
-    String followId,
-  ) async {
+  Future<void> followUser({
+    required String sourceUserid,
+    required String sourceUsername,
+    required String sourceUserProfImage,
+    required String targetUserId,
+  }) async {
     try {
       String notificationId = const Uuid().v1();
 
       model.Notification notification = model.Notification(
-        username: 'testUsername',
-        uid: uid,
+        username: sourceUsername,
+        uid: sourceUserid,
         notificationType: 'Follow',
         datePublished: DateTime.now(),
-        profImage: '',
+        profImage: sourceUserProfImage,
       );
       DocumentSnapshot snap =
-          await _firestore.collection('users').doc(uid).get();
+          await _firestore.collection('users').doc(sourceUserid).get();
       List following = (snap.data()! as dynamic)['following'];
-      if (following.contains(followId)) {
-        await _firestore.collection('users').doc(uid).update({
-          'following': FieldValue.arrayRemove([followId]),
+      if (following.contains(targetUserId)) {
+        await _firestore.collection('users').doc(sourceUserid).update({
+          'following': FieldValue.arrayRemove([targetUserId]),
         });
-        await _firestore.collection('users').doc(followId).update({
-          'followers': FieldValue.arrayRemove([uid]),
+        await _firestore.collection('users').doc(targetUserId).update({
+          'followers': FieldValue.arrayRemove([sourceUserid]),
         });
       } else {
         // create a notification
         await _firestore
             .collection('users')
-            .doc(followId)
+            .doc(targetUserId)
             .collection('notifications')
             .doc(notificationId)
             .set(notification.toJson());
-        await _firestore.collection('users').doc(uid).update({
-          'following': FieldValue.arrayUnion([followId]),
+        await _firestore.collection('users').doc(sourceUserid).update({
+          'following': FieldValue.arrayUnion([targetUserId]),
         });
-        await _firestore.collection('users').doc(followId).update({
-          'followers': FieldValue.arrayUnion([uid]),
+        await _firestore.collection('users').doc(targetUserId).update({
+          'followers': FieldValue.arrayUnion([sourceUserid]),
         });
       }
     } catch (e) {

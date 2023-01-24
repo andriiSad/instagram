@@ -40,6 +40,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             .collection('users')
             .doc(user.uid)
             .collection('notifications')
+            .orderBy('datePublished', descending: true)
             .snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {

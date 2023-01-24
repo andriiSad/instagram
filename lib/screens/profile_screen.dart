@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:instagram/resources/auth_methods.dart';
 import 'package:instagram/resources/firestore_methods.dart';
 import 'package:instagram/screens/login_screen.dart';
+import 'package:instagram/models/user.dart' as us;
+
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/user_provider.dart';
 import '../widgets/follow_button.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -65,6 +69,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final us.User user = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    ).getUser;
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(),
@@ -137,9 +145,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 function: () async {
                                                   await FirestoreMethods()
                                                       .followUser(
-                                                    FirebaseAuth.instance
-                                                        .currentUser!.uid,
-                                                    userData['uid'],
+                                                    sourceUserid: user.uid,
+                                                    sourceUserProfImage:
+                                                        user.photoUrl,
+                                                    sourceUsername:
+                                                        user.username,
+                                                    targetUserId:
+                                                        userData['uid'],
                                                   );
                                                   setState(() {
                                                     isFollowing = false;
@@ -155,9 +167,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 function: () async {
                                                   await FirestoreMethods()
                                                       .followUser(
-                                                    FirebaseAuth.instance
-                                                        .currentUser!.uid,
-                                                    userData['uid'],
+                                                    sourceUserid: user.uid,
+                                                    sourceUserProfImage:
+                                                        user.photoUrl,
+                                                    sourceUsername:
+                                                        user.username,
+                                                    targetUserId:
+                                                        userData['uid'],
                                                   );
                                                   //TODO USE STREAMBUILDER INTEAD OF FUTUREBUILDER TO FIX THAT
                                                   setState(() {

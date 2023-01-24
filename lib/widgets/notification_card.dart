@@ -27,7 +27,7 @@ class NotificationCard extends StatelessWidget {
               backgroundImage: NetworkImage(
                 snap['profImage'],
               ),
-              radius: 26,
+              radius: 22,
             ),
           ),
           Text(
