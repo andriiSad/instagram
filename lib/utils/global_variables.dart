@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram/screens/add_post_screen.dart';
 
 import '../screens/feed_screen.dart';
+import '../screens/notification_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/search_screen.dart';
 
@@ -12,7 +13,7 @@ List<Widget> homeScreenItems = [
   const FeedScreen(),
   const SearchScreen(),
   const AddPostScreen(),
-  const Text('notif'),
+  const NotificationScreen(),
   ProfileScreen(
     uid: FirebaseAuth.instance.currentUser!.uid,
   ),

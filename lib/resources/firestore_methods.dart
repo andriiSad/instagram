@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram/models/comment.dart';
+import 'package:instagram/models/notification.dart' as model;
 import 'package:instagram/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 
@@ -144,11 +145,21 @@ class FirestoreMethods {
     }
   }
 
+//TODO change function parameters naming, fill notification with real data
   Future<void> followUser(
     String uid,
     String followId,
   ) async {
     try {
+      String notificationId = const Uuid().v1();
+
+      model.Notification notification = model.Notification(
+        username: 'testUsername',
+        uid: uid,
+        notificationType: 'Follow',
+        datePublished: DateTime.now(),
+        profImage: '',
+      );
       DocumentSnapshot snap =
           await _firestore.collection('users').doc(uid).get();
       List following = (snap.data()! as dynamic)['following'];
@@ -160,6 +171,13 @@ class FirestoreMethods {
           'followers': FieldValue.arrayRemove([uid]),
         });
       } else {
+        // create a notification
+        await _firestore
+            .collection('users')
+            .doc(followId)
+            .collection('notifications')
+            .doc(notificationId)
+            .set(notification.toJson());
         await _firestore.collection('users').doc(uid).update({
           'following': FieldValue.arrayUnion([followId]),
         });
