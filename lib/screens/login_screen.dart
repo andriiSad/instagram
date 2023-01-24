@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
@@ -9,6 +11,7 @@ import '../resources/auth_methods.dart';
 import '../responsive/mobile_screen_layout.dart';
 import '../responsive/responsive_layout_screen.dart';
 import '../responsive/web_screen_layout.dart';
+import '../utils/global_variables.dart';
 import '../utils/utils.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -65,11 +68,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          width: double.infinity,
+          padding: deviceSize.width > webScreenSize
+              ? EdgeInsets.symmetric(horizontal: max(deviceSize.width / 3, 32))
+              : const EdgeInsets.symmetric(horizontal: 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

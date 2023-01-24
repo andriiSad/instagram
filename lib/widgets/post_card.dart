@@ -100,6 +100,8 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
+
     final User user = Provider.of<UserProvider>(context).getUser;
     return Container(
       color: mobileBackgroundColor,
