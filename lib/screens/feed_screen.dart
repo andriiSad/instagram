@@ -7,7 +7,16 @@ import 'package:instagram/utils/global_variables.dart';
 import '../widgets/post_card.dart';
 
 class FeedScreen extends StatelessWidget {
-  const FeedScreen({super.key});
+  FeedScreen({super.key});
+  final ScrollController _controller = ScrollController();
+
+  void _scrollUp() {
+    _controller.animateTo(
+      _controller.position.minScrollExtent,
+      duration: const Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +31,13 @@ class FeedScreen extends StatelessWidget {
               centerTitle: false,
               title: Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: SvgPicture.asset(
-                  'assets/ic_instagram.svg',
-                  color: primaryColor,
-                  height: 32,
+                child: GestureDetector(
+                  onTap: _scrollUp,
+                  child: SvgPicture.asset(
+                    'assets/ic_instagram.svg',
+                    color: primaryColor,
+                    height: 32,
+                  ),
                 ),
               ),
               actions: [
@@ -48,6 +60,7 @@ class FeedScreen extends StatelessWidget {
             );
           }
           return ListView.builder(
+            controller: _controller,
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) => Container(
               margin: EdgeInsets.symmetric(
