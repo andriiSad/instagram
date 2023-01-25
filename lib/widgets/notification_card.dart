@@ -1,9 +1,10 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram/screens/post_screen.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:intl/intl.dart';
+
+import '../screens/profile_screen.dart';
 
 enum NotificationTypes {
   follow,
@@ -18,7 +19,6 @@ class NotificationCard extends StatelessWidget {
   });
   final QueryDocumentSnapshot<Map<String, dynamic>> snap;
   late final NotificationTypes notificationType;
-
   void setNotificationType() {
     switch (snap['notificationType']) {
       case 'follow':
@@ -38,7 +38,7 @@ class NotificationCard extends StatelessWidget {
     setNotificationType();
     return Padding(
       padding: const EdgeInsets.only(
-        bottom: 8,
+        bottom: 20,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -52,33 +52,55 @@ class NotificationCard extends StatelessWidget {
               radius: 22,
             ),
           ),
-          Text(
-            snap['username'],
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: primaryColor,
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ProfileScreen(
+                  uid: snap['uid'],
+                ),
+              ),
+            ),
+            child: Text(
+              snap['username'],
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: primaryColor,
+              ),
             ),
           ),
           if (notificationType == NotificationTypes.follow)
             const Text(" started following you."),
           if (notificationType == NotificationTypes.likePost)
-            const Text(" liked your post."),
+            Row(
+              children: [
+                const Text(" liked your post."),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: InkWell(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => PostScreen(
+                          postId: snap['postId'],
+                        ),
+                      ),
+                    ),
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(
+                              'https://images.unsplash.com/photo-1674632633951-34a050fc0b95?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=400&q=60',
+                            ),
+                            fit: BoxFit.fill),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           if (notificationType == NotificationTypes.likeComment)
             const Text(" liked your comment."),
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Container(
-              height: 30,
-              width: 30,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(
-                      'https://images.unsplash.com/photo-1674632633951-34a050fc0b95?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=400&q=60',
-                    ),
-                    fit: BoxFit.fill),
-              ),
-            ),
-          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(right: 8),

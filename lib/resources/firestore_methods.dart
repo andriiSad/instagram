@@ -70,6 +70,7 @@ class FirestoreMethods {
             notificationType: 'likePost',
             datePublished: DateTime.now(),
             profImage: postLikingUser['photoUrl'],
+            postId: postId,
           );
           await _firestore
               .collection('users')
@@ -196,6 +197,7 @@ class FirestoreMethods {
           notificationType: 'follow',
           datePublished: DateTime.now(),
           profImage: sourceUserProfImage,
+          postId: '',
         );
         await _firestore
             .collection('users')

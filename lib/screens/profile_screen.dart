@@ -5,6 +5,7 @@ import 'package:instagram/resources/auth_methods.dart';
 import 'package:instagram/resources/firestore_methods.dart';
 import 'package:instagram/screens/login_screen.dart';
 import 'package:instagram/models/user.dart' as us;
+import 'package:instagram/screens/post_screen.dart';
 
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/utils.dart';
@@ -248,11 +249,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             itemBuilder: (context, index) {
                               DocumentSnapshot snap =
                                   snapshot.data!.docs[index];
-                              return Image(
-                                image: NetworkImage(
-                                  snap['postUrl'],
+                              return InkWell(
+                                onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => PostScreen(
+                                      postId: snap['postId'],
+                                    ),
+                                  ),
                                 ),
-                                fit: BoxFit.cover,
+                                child: Image(
+                                  image: NetworkImage(
+                                    snap['postUrl'],
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
                               );
                             },
                           );

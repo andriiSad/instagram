@@ -7,6 +7,7 @@ class Notification {
     required this.datePublished,
     required this.profImage,
     required this.notificationType,
+    required this.postId,
   });
 
   final String uid;
@@ -14,6 +15,7 @@ class Notification {
   final DateTime datePublished;
   final String profImage;
   final String notificationType;
+  final String postId;
 
   Map<String, dynamic> toJson() => {
         'uid': uid,
@@ -21,6 +23,7 @@ class Notification {
         'datePublished': datePublished,
         'profImage': profImage,
         'notificationType': notificationType,
+        'postId': postId,
       };
 
   static Notification fromSnap(DocumentSnapshot snap) {
@@ -32,6 +35,7 @@ class Notification {
       datePublished: snapshot['datePublished'],
       profImage: snapshot['profImage'],
       notificationType: snapshot['notificationType'],
+      postId: snapshot['postId'],
     );
   }
 }

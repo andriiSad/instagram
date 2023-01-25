@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:instagram/screens/post_screen.dart';
 import 'package:instagram/screens/profile_screen.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/global_variables.dart';
@@ -95,8 +96,16 @@ class _SearchScreenState extends State<SearchScreen> {
                 return StaggeredGridView.countBuilder(
                   crossAxisCount: 3,
                   itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) =>
-                      Image.network(snapshot.data!.docs[index]['postUrl']),
+                  itemBuilder: (context, index) => InkWell(
+                      onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PostScreen(
+                                postId: snapshot.data!.docs[index]['postId'],
+                              ),
+                            ),
+                          ),
+                      child:
+                          Image.network(snapshot.data!.docs[index]['postUrl'])),
                   staggeredTileBuilder: (index) =>
                       deviceSize.width > webScreenSize
                           ? const StaggeredTile.count(
