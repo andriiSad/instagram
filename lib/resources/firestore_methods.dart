@@ -56,6 +56,29 @@ class FirestoreMethods {
           'likes': FieldValue.arrayRemove([uid]),
         });
       } else {
+        final postOwnerUser =
+            await _firestore.collection('posts').doc(postId).get();
+        final postOwnerId = postOwnerUser['uid'];
+        if (postOwnerId != uid) {
+          final postLikingUser =
+              await _firestore.collection('users').doc(uid).get();
+
+          String notificationId = const Uuid().v1();
+          model.Notification notification = model.Notification(
+            username: postLikingUser['username'],
+            uid: uid,
+            notificationType: 'likePost',
+            datePublished: DateTime.now(),
+            profImage: postLikingUser['photoUrl'],
+          );
+          await _firestore
+              .collection('users')
+              .doc(postOwnerId)
+              .collection('notifications')
+              .doc(notificationId)
+              .set(notification.toJson());
+        }
+
         await _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayUnion([uid]),
         });
@@ -153,15 +176,6 @@ class FirestoreMethods {
     required String targetUserId,
   }) async {
     try {
-      String notificationId = const Uuid().v1();
-
-      model.Notification notification = model.Notification(
-        username: sourceUsername,
-        uid: sourceUserid,
-        notificationType: 'Follow',
-        datePublished: DateTime.now(),
-        profImage: sourceUserProfImage,
-      );
       DocumentSnapshot snap =
           await _firestore.collection('users').doc(sourceUserid).get();
       List following = (snap.data()! as dynamic)['following'];
@@ -174,6 +188,15 @@ class FirestoreMethods {
         });
       } else {
         // create a notification
+        String notificationId = const Uuid().v1();
+
+        model.Notification notification = model.Notification(
+          username: sourceUsername,
+          uid: sourceUserid,
+          notificationType: 'follow',
+          datePublished: DateTime.now(),
+          profImage: sourceUserProfImage,
+        );
         await _firestore
             .collection('users')
             .doc(targetUserId)

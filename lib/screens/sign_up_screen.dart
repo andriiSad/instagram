@@ -120,14 +120,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               backgroundImage: _defaultImage,
                             ),
                       Positioned(
-                          bottom: -10,
-                          left: 50,
-                          child: IconButton(
-                            onPressed: _selectImage,
-                            icon: const Icon(
-                              Icons.add_a_photo,
-                            ),
-                          )),
+                        bottom: -10,
+                        left: 50,
+                        child: IconButton(
+                          onPressed: _selectImage,
+                          icon: const Icon(
+                            Icons.add_a_photo,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(

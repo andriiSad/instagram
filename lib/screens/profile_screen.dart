@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/user_provider.dart';
 import '../widgets/follow_button.dart';
+import 'edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({
@@ -138,7 +139,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 mobileBackgroundColor,
                                             borderColor: Colors.grey,
                                             textColor: primaryColor,
-                                            function: () {},
+                                            function: () =>
+                                                Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const EditProfileScreen(),
+                                              ),
+                                            ),
                                           )
                                         : isFollowing
                                             ? FollowButton(
