@@ -61,9 +61,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: ((context, index) {
                     return InkWell(
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
                           builder: (context) => ProfileScreen(
-                              uid: snapshot.data!.docs[index]['uid']))),
+                            uid: snapshot.data!.docs[index]['uid'],
+                          ),
+                        ),
+                      ),
                       child: ListTile(
                         leading: CircleAvatar(
                           backgroundImage: NetworkImage(

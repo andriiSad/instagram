@@ -82,6 +82,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: Text(userData['username']),
               centerTitle: false,
               backgroundColor: mobileBackgroundColor,
+              actions: [
+                IconButton(
+                  onPressed: () async {
+                    await AuthMethods().signOut();
+                    if (mounted) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(),
+                        ),
+                      );
+                    }
+                  },
+                  icon: const Icon(Icons.exit_to_app),
+                )
+              ],
             ),
             body: ListView(
               children: [
@@ -118,23 +133,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     FirebaseAuth.instance.currentUser!.uid ==
                                             widget.uid
                                         ? FollowButton(
-                                            text: 'Sign Out',
+                                            text: 'Edit Profile',
                                             backgroundColor:
                                                 mobileBackgroundColor,
                                             borderColor: Colors.grey,
                                             textColor: primaryColor,
-                                            function: () async {
-                                              await AuthMethods().signOut();
-                                              if (mounted) {
-                                                Navigator.of(context)
-                                                    .pushReplacement(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const LoginScreen(),
-                                                  ),
-                                                );
-                                              }
-                                            },
+                                            function: () {},
                                           )
                                         : isFollowing
                                             ? FollowButton(

@@ -8,6 +8,7 @@ import 'package:instagram/widgets/like_animation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/profile_screen.dart';
 import '../utils/colors.dart';
 
 class PostCard extends StatefulWidget {
@@ -124,10 +125,19 @@ class _PostCardState extends State<PostCard> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8),
-                    child: Text(
-                      widget.snap['username'],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
+                    child: InkWell(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(
+                            uid: widget.snap['uid'],
+                          ),
+                        ),
+                      ),
+                      child: Text(
+                        widget.snap['username'],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
