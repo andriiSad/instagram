@@ -2,6 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram/utils/colors.dart';
 import 'package:instagram/utils/global_variables.dart';
+import 'package:provider/provider.dart';
+
+import '../models/user.dart';
+import '../providers/user_provider.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({super.key});
@@ -38,6 +42,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final User user = Provider.of<UserProvider>(context).getUser;
+
     return Scaffold(
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
@@ -81,9 +87,23 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             backgroundColor: primaryColor,
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-              color: _page == 4 ? primaryColor : secondaryColor,
+            //TODO FIX LOADING ICON
+            // icon: user != null
+            // ? CircleAvatar(
+            //     radius: 13,
+            //     backgroundImage: NetworkImage(
+            //       user.photoUrl,
+            //         ),
+            //       )
+            //     : Icon(
+            //         Icons.person,
+            //         color: _page == 3 ? primaryColor : secondaryColor,
+            //       ),
+            icon: CircleAvatar(
+              radius: 13,
+              backgroundImage: NetworkImage(
+                user.photoUrl,
+              ),
             ),
             label: '',
             backgroundColor: primaryColor,

@@ -45,33 +45,34 @@ class FirestoreMethods {
     return res;
   }
 
-  Future<void> likePost({
+  Future<String> likePost({
     required String postId,
     required String uid,
     required List likes,
   }) async {
+    String res = "Some error occured";
+
     try {
       if (likes.contains(uid)) {
         await _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayRemove([uid]),
         });
       } else {
-        final postOwnerUser =
-            await _firestore.collection('posts').doc(postId).get();
-        final postOwnerId = postOwnerUser['uid'];
+        final post = await _firestore.collection('posts').doc(postId).get();
+        final postOwnerId = post['uid'];
         if (postOwnerId != uid) {
           final postLikingUser =
               await _firestore.collection('users').doc(uid).get();
 
           String notificationId = const Uuid().v1();
           model.Notification notification = model.Notification(
-            username: postLikingUser['username'],
-            uid: uid,
-            notificationType: 'likePost',
-            datePublished: DateTime.now(),
-            profImage: postLikingUser['photoUrl'],
-            postId: postId,
-          );
+              username: postLikingUser['username'],
+              uid: uid,
+              notificationType: 'likePost',
+              datePublished: DateTime.now(),
+              profImage: postLikingUser['photoUrl'],
+              postId: postId,
+              postUrl: post['postUrl']);
           await _firestore
               .collection('users')
               .doc(postOwnerId)
@@ -84,10 +85,11 @@ class FirestoreMethods {
           'likes': FieldValue.arrayUnion([uid]),
         });
       }
+      res = 'success';
     } catch (e) {
-      //TODO change to res approach
-      print(e.toString());
+      res = e.toString();
     }
+    return res;
   }
 
   Future<String> uploadComment({
@@ -128,12 +130,14 @@ class FirestoreMethods {
     return res;
   }
 
-  Future<void> likeComment({
+  Future<String> likeComment({
     required String postId,
     required String commentId,
     required String uid,
     required List likes,
   }) async {
+    String res = "Some error occured";
+
     try {
       if (likes.contains(uid)) {
         await _firestore
@@ -154,28 +158,32 @@ class FirestoreMethods {
           'likes': FieldValue.arrayUnion([uid]),
         });
       }
+      res = 'success';
     } catch (e) {
-      //TODO change to res approach
-      print(e.toString());
+      res = e.toString();
     }
+    return res;
   }
 
-  Future<void> deletePost(String postId) async {
+  Future<String> deletePost(String postId) async {
+    String res = "Some error occured";
     try {
       await _firestore.collection('posts').doc(postId).delete();
+      res = 'success';
     } catch (e) {
-      //TODO change to res approach
-      print(e.toString());
+      res = e.toString();
     }
+    return res;
   }
 
-//TODO change function parameters naming, fill notification with real data
-  Future<void> followUser({
+  Future<String> followUser({
     required String sourceUserid,
     required String sourceUsername,
     required String sourceUserProfImage,
     required String targetUserId,
   }) async {
+    String res = "Some error occured";
+
     try {
       DocumentSnapshot snap =
           await _firestore.collection('users').doc(sourceUserid).get();
@@ -188,7 +196,6 @@ class FirestoreMethods {
           'followers': FieldValue.arrayRemove([sourceUserid]),
         });
       } else {
-        // create a notification
         String notificationId = const Uuid().v1();
 
         model.Notification notification = model.Notification(
@@ -198,6 +205,7 @@ class FirestoreMethods {
           datePublished: DateTime.now(),
           profImage: sourceUserProfImage,
           postId: '',
+          postUrl: '',
         );
         await _firestore
             .collection('users')
@@ -211,9 +219,11 @@ class FirestoreMethods {
         await _firestore.collection('users').doc(targetUserId).update({
           'followers': FieldValue.arrayUnion([sourceUserid]),
         });
+        res = 'success';
       }
     } catch (e) {
-      print(e.toString());
+      res = e.toString();
     }
+    return res;
   }
 }

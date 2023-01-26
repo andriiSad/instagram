@@ -187,7 +187,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     targetUserId:
                                                         userData['uid'],
                                                   );
-                                                  //TODO USE STREAMBUILDER INTEAD OF FUTUREBUILDER TO FIX THAT
                                                   setState(() {
                                                     isFollowing = true;
                                                     followers++;

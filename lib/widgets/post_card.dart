@@ -4,6 +4,7 @@ import 'package:instagram/models/user.dart';
 import 'package:instagram/providers/user_provider.dart';
 import 'package:instagram/resources/firestore_methods.dart';
 import 'package:instagram/screens/comments_screen.dart';
+import 'package:instagram/utils/utils.dart';
 import 'package:instagram/widgets/like_animation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -78,8 +79,7 @@ class _PostCardState extends State<PostCard> {
         style: TextStyle(color: Colors.red),
       ),
       onPressed: () {
-        //TODO  add complanation logic
-        print("Compained ${widget.snap['postId']}");
+        showSnackBar("Complained ${widget.snap['postId']}", context);
         Navigator.of(context).pop();
       },
     );
@@ -101,8 +101,6 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
-
     final User user = Provider.of<UserProvider>(context).getUser;
     return Container(
       color: mobileBackgroundColor,
@@ -276,20 +274,29 @@ class _PostCardState extends State<PostCard> {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.only(top: 8),
-                  child: RichText(
-                    text: TextSpan(
-                      style: const TextStyle(color: Colors.white),
-                      children: [
-                        TextSpan(
-                          text: widget.snap['username'],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                  child: InkWell(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ProfileScreen(
+                          uid: widget.snap['uid'],
+                        ),
+                      ),
+                    ),
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(color: Colors.white),
+                        children: [
+                          TextSpan(
+                            text: widget.snap['username'],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        TextSpan(
-                          text: ' ${widget.snap['description']}',
-                        ),
-                      ],
+                          TextSpan(
+                            text: ' ${widget.snap['description']}',
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -360,30 +367,25 @@ class ViewAllCommentsWidget extends StatelessWidget {
           );
         }
         int commentLength = snapshot.data!.docs.length;
+        const TextStyle commentTextStyle = TextStyle(
+          fontSize: 16,
+          color: secondaryColor,
+        );
         switch (commentLength) {
           case 0:
             return const Text(
               "No comments yet",
-              style: TextStyle(
-                fontSize: 16,
-                color: secondaryColor,
-              ),
+              style: commentTextStyle,
             );
           case 1:
             return const Text(
               "View 1 comment",
-              style: TextStyle(
-                fontSize: 16,
-                color: secondaryColor,
-              ),
+              style: commentTextStyle,
             );
           default:
             return Text(
               "View all $commentLength comments",
-              style: const TextStyle(
-                fontSize: 16,
-                color: secondaryColor,
-              ),
+              style: commentTextStyle,
             );
         }
       },

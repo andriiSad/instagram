@@ -11,20 +11,43 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:instagram/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('AddPostScreen', () {
+    test('_selectImage should return a dialog', () {
+      BuildContext context;
+      expect(
+          _AddPostScreenState()._selectImage(context),
+          isA<
+              Future<
+                  String>>()); // changed isNotNull to isA<Future<String>>() since _selectImage should return a Future type
+    });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    test('_postImage should return success when valid parameters are passed',
+        () async {
+      String uid = '123';
+      String username = 'test';
+      String profImage = 'http://test.com/image.jpg';
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      Uint8List? file = Uint8List.fromList([1, 2, 3]);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      expect(
+          await _AddPostScreenState()._postImage(
+              uid: uid,
+              username: username,
+              profImage: profImage,
+              file: file!), // added missing comma after profImage parameter
+          equals('success'));
+    });
+
+    test('_clearImage should set _file to null', () {
+      _AddPostScreenState state = _AddPostScreenState();
+      state._file = Uint8List.fromList([1, 2, 3]);
+
+      state._clearImage();
+
+      expect(
+          state._file,
+          equals(
+              null)); // changed isNull to equals(null) since we are checking if the value of the variable is equal to null
+    });
   });
 }

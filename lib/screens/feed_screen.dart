@@ -6,9 +6,20 @@ import 'package:instagram/utils/global_variables.dart';
 
 import '../widgets/post_card.dart';
 
-class FeedScreen extends StatelessWidget {
-  FeedScreen({super.key});
+class FeedScreen extends StatefulWidget {
+  const FeedScreen({super.key});
+
+  @override
+  State<FeedScreen> createState() => _FeedScreenState();
+}
+
+class _FeedScreenState extends State<FeedScreen> {
   final ScrollController _controller = ScrollController();
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   void _scrollUp() {
     _controller.animateTo(

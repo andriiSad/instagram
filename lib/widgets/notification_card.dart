@@ -87,10 +87,10 @@ class NotificationCard extends StatelessWidget {
                     child: Container(
                       height: 30,
                       width: 30,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         image: DecorationImage(
                             image: NetworkImage(
-                              'https://images.unsplash.com/photo-1674632633951-34a050fc0b95?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=400&q=60',
+                              snap['postUrl'],
                             ),
                             fit: BoxFit.fill),
                       ),

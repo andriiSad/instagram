@@ -8,6 +8,7 @@ class Notification {
     required this.profImage,
     required this.notificationType,
     required this.postId,
+    required this.postUrl,
   });
 
   final String uid;
@@ -16,6 +17,7 @@ class Notification {
   final String profImage;
   final String notificationType;
   final String postId;
+  final String postUrl;
 
   Map<String, dynamic> toJson() => {
         'uid': uid,
@@ -24,6 +26,7 @@ class Notification {
         'profImage': profImage,
         'notificationType': notificationType,
         'postId': postId,
+        'postUrl': postUrl,
       };
 
   static Notification fromSnap(DocumentSnapshot snap) {
@@ -36,6 +39,7 @@ class Notification {
       profImage: snapshot['profImage'],
       notificationType: snapshot['notificationType'],
       postId: snapshot['postId'],
+      postUrl: snapshot['postUrl'],
     );
   }
 }
