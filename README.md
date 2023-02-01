@@ -1,4 +1,4 @@
 # instagram
 
-Intagram clone app using Firebase and provider package.
+Instagram clone app using Firebase and provider package.
 
